@@ -18,15 +18,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Margin="0,0,0,12"
+        <TextBlock Grid.Row="0" Style="{StaticResource AgPageTitle}" Text="Fast Flag Editor" Margin="0,0,0,4" />
+        <TextBlock Grid.Row="1"
+                   Margin="0,0,0,16"
                    Text="{x:Static resources:Strings.Menu_FastFlagEditor_Description}"
-                   Style="{StaticResource AgBody}" />
+                   Style="{StaticResource AgPageSubtitle}" />
 
-        <Border Grid.Row="1"
+        <Border Grid.Row="2"
                 Style="{StaticResource AgPanel}"
                 BorderBrush="{DynamicResource SystemFillColorCautionBrush}"
                 BorderThickness="1"
@@ -42,7 +44,7 @@
             </StackPanel>
         </Border>
 
-        <ui:InfoBar Grid.Row="2"
+        <ui:InfoBar Grid.Row="3"
                    Margin="0,0,0,16"
                    Padding="12"
                    IsOpen="True"
@@ -50,7 +52,7 @@
                    Severity="Warning"
                    IsClosable="False" />
 
-        <WrapPanel Grid.Row="3" Orientation="Horizontal">
+        <WrapPanel Grid.Row="4" Orientation="Horizontal">
             <ui:Button Icon="ArrowLeft24"
                        Style="{StaticResource AgButtonSubtle}"
                        Content="{x:Static resources:Strings.Menu_FastFlagEditor_Back}"
@@ -88,14 +90,14 @@
         </WrapPanel>
 
         <ui:TextBox x:Name="SearchTextBox"
-                   Grid.Row="4"
+                   Grid.Row="5"
                    Style="{StaticResource AgTextBox}"
                    Margin="0,0,0,14"
                    Icon="Search32"
                    PlaceholderText="{x:Static resources:Strings.Menu_FastFlagEditor_Search}"
                    TextChanged="SearchTextBox_TextChanged" />
 
-        <Border Grid.Row="5"
+        <Border Grid.Row="6"
                 Style="{StaticResource AgCard}"
                 Padding="0">
         <DataGrid Name="DataGrid"

@@ -14,9 +14,10 @@
       Scrollable="True">
 
     <StackPanel Margin="22,20,22,24">
-        <TextBlock Margin="0,0,0,16"
+        <TextBlock Style="{StaticResource AgPageTitle}" Text="Agentstrap" />
+        <TextBlock Margin="0,6,0,12"
                    Text="{x:Static resources:Strings.Menu_Bloxstrap_Description}"
-                   Style="{StaticResource AgBody}" />
+                   Style="{StaticResource AgPageSubtitle}" />
 
         <controls:OptionControl Header="{x:Static resources:Strings.Menu_Behaviour_AutoUpdate_Title}"
                                 Description="{x:Static resources:Strings.Menu_Behaviour_AutoUpdate_Description}">
@@ -27,6 +28,31 @@
                                 Description="{Binding Source={x:Static resources:Strings.Menu_Bloxstrap_Analytics_Description}, Converter={StaticResource StringFormatConverter}, ConverterParameter='https://agentstrap-doc.pages.dev/info/privacy-policy.html'}">
             <ui:ToggleSwitch IsChecked="{Binding AnalyticsEnabled, Mode=TwoWay}" />
         </controls:OptionControl>
+
+        <ui:CardExpander Margin="0,8,0,0" Style="{StaticResource AgDisclosure}" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Sidebar layout" Style="{StaticResource AgCardTitle}" />
+                    <TextBlock Text="Choose which tabs appear and change their order. Use Save at the bottom to keep your layout." Style="{StaticResource AgCaption}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <ItemsControl ItemsSource="{Binding NavigationTabs}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox VerticalAlignment="Center" Content="{Binding Label}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                            <ui:Button Grid.Column="1" Appearance="Secondary" Margin="4,0" MinWidth="34" Content="↑" ToolTip="Move tab up" Command="{Binding MoveUpCommand}" />
+                            <ui:Button Grid.Column="2" Appearance="Secondary" MinWidth="34" Content="↓" ToolTip="Move tab down" Command="{Binding MoveDownCommand}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ui:CardExpander>
 
         <!-- This does not need i18n as this is locked behind "Developer Mode" -->
         <controls:OptionControl Visibility="{Binding Path=WebEnvironmentVisibility, Mode=OneTime}"

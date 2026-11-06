@@ -15,6 +15,24 @@
         <TextBlock Style="{StaticResource AgPageTitle}" Text="{x:Static resources:Strings.Menu_Integrations_Title}" />
         <TextBlock Style="{StaticResource AgPageSubtitle}" Text="{x:Static resources:Strings.Menu_Integrations_Description}" />
 
+        <TextBlock Style="{StaticResource AgSectionHeader}" Text="Automatic experience joining" />
+        <TextBlock Style="{StaticResource AgBody}"
+                   Text="Choose a Roblox experience to join automatically whenever you launch Roblox through Agentstrap." />
+        <controls:OptionControl Header="Experience Place ID"
+                                Description="Enter a numeric place ID or a Roblox experience link. Save to turn on automatic joining.">
+            <ui:TextBox Width="260"
+                        PlaceholderText="Enter a Roblox place ID"
+                        Text="{Binding AutoJoinPlaceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </controls:OptionControl>
+        <TextBlock Margin="20,2,0,0" Style="{StaticResource AgBody}"
+                   Text="{Binding AutoJoinStatus, Mode=OneWay}" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+            <ui:Button Appearance="Primary" Icon="Save28" Content="Save experience"
+                       Command="{Binding SaveAutoJoinCommand, Mode=OneTime}" />
+            <ui:Button Appearance="Danger" Margin="8,0,0,0" Icon="Delete24" Content="Delete"
+                       Command="{Binding DeleteAutoJoinCommand, Mode=OneTime}" />
+        </StackPanel>
+
         <TextBlock Style="{StaticResource AgSectionHeader}" Text="{x:Static resources:Strings.Menu_Integrations_ActivityTracking}" />
 
         <controls:OptionControl 
@@ -123,7 +141,7 @@
                     </Style>
                 </StackPanel.Style>
                 <TextBlock Text="{x:Static resources:Strings.Common_Name}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <ui:TextBox Margin="0,4,0,0" Text="{Binding SelectedCustomIntegration.Name, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:TextBox Margin="0,4,0,0" PlaceholderText="Name shown in the integration list" Text="{Binding SelectedCustomIntegration.Name, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Margin="0,8,0,0" Text="{x:Static resources:Strings.Menu_Integrations_Custom_AppLocation}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 <Grid Margin="0,4,0,0">
                     <Grid.ColumnDefinitions>

@@ -5,7 +5,7 @@
         // formatting is done here instead of in xaml, it's just a bit easier
         public string MainText => String.Format(
             Strings.Installer_Welcome_MainText,
-            "[github.com/agentxco2-dev/Agentstrap](https://github.com/agentxco2-dev/Agentstrap)",
+            "[github.com/Agentstrap-Labs/Agentstrap](https://github.com/Agentstrap-Labs/Agentstrap)",
             "[Help and documentation](https://agentstrap-doc.pages.dev/)"
         );
 

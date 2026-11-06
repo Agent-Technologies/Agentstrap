@@ -25,6 +25,7 @@
         <controls:OptionControl Header="Deployment channel"
                                 Description="Leave empty to follow whatever Roblox releases. Set it to a channel name to pin Agentstrap to that one.">
             <ui:TextBox Width="200"
+                        PlaceholderText="Leave empty to follow Roblox"
                         Text="{Binding DeploymentChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </controls:OptionControl>
 
@@ -101,6 +102,7 @@
         <controls:OptionControl Header="Place ID"
                                 Description="The experience to join. Leave empty to pick one at launch time.">
             <ui:TextBox Width="200"
+                        PlaceholderText="Enter a Roblox place ID"
                         Text="{Binding AgentstrapMatchmakerPlaceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </controls:OptionControl>
 

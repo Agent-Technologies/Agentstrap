@@ -122,6 +122,16 @@ namespace Agentstrap
             if (!_lock.IsAcquired || _watcherData is null)
                 return;
 
+            DateTime sessionStart = DateTime.UtcNow;
+            try
+            {
+                using var proc = Process.GetProcessById(_watcherData.ProcessId);
+                sessionStart = proc.StartTime.ToUniversalTime();
+            }
+            catch { }
+
+            string? analyticsSessionId = RobloxAnalyticsService.StartSession(_watcherData.ProcessId, null, null, null, sessionStart);
+
             ActivityWatcher?.Start();
 
             if (App.Settings.Prop.CustomWindowAttributesEnabled)
@@ -129,6 +139,27 @@ namespace Agentstrap
 
             while (Utilities.GetProcessesSafe().Any(x => x.Id == _watcherData.ProcessId))
                 await Task.Delay(1000);
+
+            // finalize analytics session
+            try
+            {
+                string? placeId = null;
+                string? universeId = null;
+                if (ActivityWatcher is not null)
+                {
+                    var data = ActivityWatcher.Data;
+                    if (data.PlaceId == 0 && ActivityWatcher.History.Count > 0)
+                        data = ActivityWatcher.History[0];
+                    if (data.PlaceId != 0) placeId = data.PlaceId.ToString();
+                    if (data.UniverseId != 0) universeId = data.UniverseId.ToString();
+                }
+                string status = "Completed";
+                RobloxAnalyticsService.EndSession(analyticsSessionId, placeId, universeId, null, status, DateTime.UtcNow);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("Watcher::Analytics", ex);
+            }
 
             if (_watcherData.AutoclosePids is not null)
             {

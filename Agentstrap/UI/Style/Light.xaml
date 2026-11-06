@@ -1,5 +1,50 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Soft neutral surfaces keep the same hierarchy in the optional light theme. -->
+    <Color x:Key="ApplicationBackgroundColor">#FFF4F6F4</Color>
+    <SolidColorBrush x:Key="ApplicationBackgroundBrush" Color="#FFF4F6F4" />
+    <Color x:Key="CardBackgroundFillColorDefault">#FFFFFFFF</Color>
+    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FFFFFFFF" />
+    <Color x:Key="CardBackgroundFillColorSecondary">#FFF8FAF8</Color>
+    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="#FFF8FAF8" />
+    <Color x:Key="CardStrokeColorDefault">#FFE1E7E2</Color>
+    <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FFE1E7E2" />
+    <Color x:Key="CardStrokeColorDefaultSolid">#FFFFFFFF</Color>
+    <SolidColorBrush x:Key="CardStrokeColorDefaultSolidBrush" Color="#FFFFFFFF" />
+    <Color x:Key="ControlStrokeColorDefault">#FFDDE4DE</Color>
+    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFDDE4DE" />
+    <Color x:Key="ControlStrokeColorSecondary">#FFCFD8D1</Color>
+    <SolidColorBrush x:Key="ControlStrokeColorSecondaryBrush" Color="#FFCFD8D1" />
+    <Color x:Key="SolidBackgroundFillColorBase">#FFF4F6F4</Color>
+    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FFF4F6F4" />
+    <Color x:Key="SolidBackgroundFillColorSecondary">#FFE9EEEA</Color>
+    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush" Color="#FFE9EEEA" />
+    <Color x:Key="SolidBackgroundFillColorTertiary">#FFF0F3F0</Color>
+    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush" Color="#FFF0F3F0" />
+    <Color x:Key="SolidBackgroundFillColorQuarternary">#FFE7ECE8</Color>
+    <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#FFE7ECE8" />
+    <Color x:Key="DividerStrokeColorDefault">#FFDDE4DE</Color>
+    <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FFDDE4DE" />
+    <!-- The same brand hue is deepened to retain contrast on light surfaces. -->
+    <Color x:Key="SystemAccentColor">#287A4D</Color>
+    <Color x:Key="SystemAccentColorPrimary">#287A4D</Color>
+    <Color x:Key="SystemAccentColorSecondary">#246D45</Color>
+    <Color x:Key="SystemAccentColorTertiary">#1C5B38</Color>
+    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="#287A4D" />
+    <SolidColorBrush x:Key="SystemAccentColorPrimaryBrush" Color="#287A4D" />
+    <SolidColorBrush x:Key="SystemAccentColorSecondaryBrush" Color="#246D45" />
+    <SolidColorBrush x:Key="SystemAccentColorTertiaryBrush" Color="#1C5B38" />
+    <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#246D45" />
+    <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="#1C5B38" />
+    <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="#287A4D" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="White" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="#80FFFFFF" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="White" />
+    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="#287A4D" />
+    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#287A4D" />
+    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#287A4D" Opacity="0.9" />
+    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#287A4D" Opacity="0.8" />
+    <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#287A4D" />
     <SolidColorBrush x:Key="NewTextEditorBackground" Color="White" />
     <SolidColorBrush x:Key="NewTextEditorForeground" Color="Black" />
-    <SolidColorBrush x:Key="NewTextEditorLink" Color="Blue" />
+    <SolidColorBrush x:Key="NewTextEditorLink" Color="#246D45" />
 </ResourceDictionary>

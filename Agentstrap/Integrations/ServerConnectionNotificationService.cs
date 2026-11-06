@@ -91,11 +91,25 @@ namespace Agentstrap.Integrations
             }
 
             // fall back to IPWho when the primary lookup fails (or is disabled) and a key is configured
+            bool usedIpWho = false;
             if (!lookup.Success && Options.IpWhoEnabled && !String.IsNullOrWhiteSpace(credentials.IpWhoApiKey))
             {
                 var backup = await _ipWhoClient.LookupAsync(canonical, credentials.IpWhoApiKey, cancellationToken);
                 if (backup.Success)
+                {
                     lookup = backup;
+                    usedIpWho = true;
+                }
+            }
+            else if (lookup.Success == false && Options.IpInfoEnabled == false && Options.IpWhoEnabled && !String.IsNullOrWhiteSpace(credentials.IpWhoApiKey))
+            {
+                // ipinfo disabled: still attempt fallback for delivery
+                var backup = await _ipWhoClient.LookupAsync(canonical, credentials.IpWhoApiKey, cancellationToken);
+                if (backup.Success)
+                {
+                    lookup = backup;
+                    usedIpWho = true;
+                }
             }
 
             // a failed lookup never blocks the notification entirely and never pretends
@@ -115,6 +129,59 @@ namespace Agentstrap.Integrations
                 message,
                 cancellationToken
             );
+
+            // capture the event for the in-app Notification Center without affecting Bark
+            try
+            {
+                var settings = App.Settings?.Prop;
+                if (settings is null || settings.NotificationCenterEnabled)
+                {
+                    string source = usedIpWho ? "IPWHO" : "IPINFO";
+                    bool categoryEnabled = source == "IPWHO"
+                        ? (settings?.NotificationCategoryIpWhoEnabled ?? true)
+                        : (settings?.NotificationCategoryIpInfoEnabled ?? true);
+
+                    if (categoryEnabled)
+                    {
+                        bool storeIp = settings?.StoreIpAddressesInNotifications ?? true;
+                        bool showLocation = settings?.ShowLocationInfoInNotifications ?? true;
+
+                        var metadata = new Dictionary<string, string>();
+                        if (storeIp) metadata["IP"] = canonical;
+                        if (lookup.Response is not null)
+                        {
+                            if (showLocation)
+                            {
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.City)) metadata["City"] = lookup.Response.City!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Region)) metadata["Region"] = lookup.Response.Region!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Country)) metadata["Country"] = lookup.Response.Country!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Organisation)) metadata["Organization"] = lookup.Response.Organisation!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Location)) metadata["Location"] = lookup.Response.Location!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Timezone)) metadata["Timezone"] = lookup.Response.Timezone!;
+                                if (!string.IsNullOrWhiteSpace(lookup.Response.Postal)) metadata["Postal"] = lookup.Response.Postal!;
+                            }
+                            if (!string.IsNullOrWhiteSpace(lookup.Response.Ip)) metadata["ReportedIP"] = lookup.Response.Ip!;
+                        }
+                        if (!string.IsNullOrWhiteSpace(lookup.ErrorCode)) metadata["ErrorCode"] = lookup.ErrorCode!;
+
+                        NotificationCenterService.Add(new NotificationRecord
+                        {
+                            Source = source,
+                            Title = ServerConnectionMessageBuilder.NotificationTitle,
+                            Message = message,
+                            CreatedUtc = DateTime.UtcNow,
+                            IsRead = false,
+                            DeliveryStatus = bark.Success ? "Delivered" : "Failed",
+                            BarkDelivered = bark.Success,
+                            Metadata = metadata.Count > 0 ? metadata : null,
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("ServerConnectionNotificationService::NotificationCenter", ex);
+            }
 
             if (!bark.Success)
             {

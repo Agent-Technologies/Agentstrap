@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Agentstrap.AppData;
 using Agentstrap.UI.Elements.Settings.Pages;
+using Agentstrap.Integrations;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Agentstrap.UI.ViewModels.Settings
@@ -65,6 +66,22 @@ namespace Agentstrap.UI.ViewModels.Settings
             new RelayCommand(OpenAgentstrapLogs);
 
         public string AgentstrapVersion => App.Version;
+
+        public string RecentExperienceSummary
+        {
+            get
+            {
+                var recent = ExperienceLibraryService.GetRecords().Where(x => x.LastLaunchedUtc.HasValue).OrderByDescending(x => x.LastLaunchedUtc).Take(3).ToList();
+                return recent.Count == 0 ? "Recently launched experiences will appear here." : string.Join("  ·  ", recent.Select(x => x.Name));
+            }
+        }
+
+        public ICommand OpenExperiencesCommand => new RelayCommand(() => NavigateTo(typeof(ExperienceRecordsPage)));
+        public ICommand OpenProfilesCommand => new RelayCommand(() => NavigateTo(typeof(ProfilesPage)));
+        public ICommand OpenRouletteCommand => new RelayCommand(() => NavigateTo(typeof(GameRoulettePage)));
+        public ICommand OpenSidequestCommand => new RelayCommand(() => NavigateTo(typeof(SidequestPage)));
+        public ICommand OpenModsCommand => new RelayCommand(() => NavigateTo(typeof(ModsPage)));
+        public ICommand OpenGlobalSettingsCommand => new RelayCommand(() => NavigateTo(typeof(GlobalSettingsPage)));
 
         public string NexusMode =>
             App.Settings.Prop.NexusModeEnabled

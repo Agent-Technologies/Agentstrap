@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:pages="clr-namespace:Agentstrap.UI.Elements.Settings.Pages"
+             xmlns:ai="clr-namespace:Agentstrap.UI.Elements.AI"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:base="clr-namespace:Agentstrap.UI.Elements.Base"
              xmlns:resources="clr-namespace:Agentstrap.Resources"
@@ -38,9 +39,9 @@
             Message="{x:Static resources:Strings.Menu_SettingsSaved_Message}"
             Appearance="Success" Icon="CheckmarkCircle32" Timeout="3000" Margin="200,0,200,20" Grid.RowSpan="10" Panel.ZIndex="9" />
 
-        <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{x:Static resources:Strings.Menu_Title}" Icon="pack://application:,,,/Agentstrap.ico" />
+        <ui:TitleBar Padding="10,8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{x:Static resources:Strings.Menu_Title}" Icon="pack://application:,,,/Agentstrap.ico" />
 
-        <Grid x:Name="RootGrid" Grid.Row="1" Margin="12,6,0,0" Visibility="Visible">
+        <Grid x:Name="RootGrid" Grid.Row="1" Margin="14,6,14,8" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -50,15 +51,32 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="1" Grid.Column="0" Margin="0,0,8,0" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="4">
-                <ui:NavigationFluent x:Name="RootNavigation" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
+            <Border Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" MinWidth="208" Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="10,8,8,8">
+                        <TextBlock Text="AGENTSTRAP" FontFamily="{StaticResource Rubik}" FontWeight="SemiBold" FontSize="11" Foreground="{DynamicResource SystemAccentColorSecondaryBrush}" />
+                        <TextBlock Text="Your Roblox, Your Customization" FontSize="12" Margin="0,3,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+                    <ui:NavigationFluent Grid.Row="1" x:Name="RootNavigation" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
                     <ui:NavigationFluent.Items>
-                    <ui:NavigationItem Content="Command Center" PageType="{x:Type pages:DashboardPage}" Icon="Home24" Tag="dashboard" />
+                    <ui:NavigationItem Content="Home" PageType="{x:Type pages:DashboardPage}" Icon="Home24" Tag="dashboard" />
+                    <ui:NavigationSeparator />
+                    <ui:NavigationItem Content="Game Roulette" PageType="{x:Type pages:GameRoulettePage}" Icon="ArrowShuffle24" Tag="roulette" />
+                    <ui:NavigationItem Content="Experience Records" PageType="{x:Type pages:ExperienceRecordsPage}" Icon="History24" Tag="experiences" />
+                    <ui:NavigationItem Content="Notification Center" PageType="{x:Type pages:NotificationCenterPage}" Icon="Alert24" Tag="notifications" />
+                    <ui:NavigationItem Content="Roblox Analytics" PageType="{x:Type pages:RobloxAnalyticsPage}" Icon="DataBarVertical24" Tag="analytics" />
+                    <ui:NavigationItem Content="Sidequest Generator" PageType="{x:Type pages:SidequestPage}" Icon="Trophy24" Tag="sidequest" />
+                    <ui:NavigationSeparator />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Integrations_Title}" PageType="{x:Type pages:IntegrationsPage}" Icon="Add28" Tag="integrations" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Behaviour_Title}" PageType="{x:Type pages:BehaviourPage}" Icon="PlaySettings20" Tag="bootstrapper" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Mods_Title}" PageType="{x:Type pages:ModsPage}" Icon="WrenchScrewdriver20" Tag="mods" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_FastFlags_Title}" PageType="{x:Type pages:FastFlagsPage}" Icon="Flag24" Tag="fastflags" />
                     <ui:NavigationItem Content="Quality of Life" PageType="{x:Type pages:QoLPage}" Icon="Wrench24" Tag="qol" />
+                    <ui:NavigationItem Content="Extensions" PageType="{x:Type pages:ExtensionsPage}" Icon="PuzzlePiece24" Tag="extensions" />
                     <ui:NavigationItem Content="Global Settings" PageType="{x:Type pages:GlobalSettingsPage}" Icon="Settings24" Tag="globalsettings" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Appearance_Title}" PageType="{x:Type pages:AppearancePage}" Icon="PaintBrush24" Tag="appearance" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Common_Shortcuts}" PageType="{x:Type pages:ShortcutsPage}" Icon="Apps28" Tag="shortcuts" />
@@ -66,16 +84,18 @@
                     <ui:NavigationItem Content="Diagnostics" PageType="{x:Type pages:DiagnosticsPage}" Icon="Pulse24" Tag="diagnostics" />
                     <ui:NavigationItem Content="Deployment" PageType="{x:Type pages:DeploymentPage}" Icon="Rocket24" Tag="deployment" />
                     <ui:NavigationItem Content="Advanced" PageType="{x:Type pages:AdvancedPage}" Icon="WrenchScrewdriver24" Tag="advanced" />
-                    <ui:NavigationItem Content="Install" PageType="{x:Type pages:InstallPage}" Icon="CloudArrowDown24" Tag="install" />
-
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_FastFlagEditor_Title}" PageType="{x:Type pages:FastFlagEditorPage}" Tag="fastflageditor" Visibility="Collapsed" />
                 </ui:NavigationFluent.Items>
                     <ui:NavigationFluent.Footer>
-                        <ui:NavigationItem Content="Agentstrap" PageType="{x:Type pages:BloxstrapPage}" Icon="Settings24" Tag="agentstrap" />
+                        <ui:NavigationSeparator Height="1" Margin="8,10,8,10" />
+                        <ui:NavigationItem Content="Install" PageType="{x:Type pages:InstallPage}" Icon="CloudArrowDown24" Tag="install" />
+                        <ui:NavigationItem Content="Agentstrap settings" PageType="{x:Type pages:BloxstrapPage}" Icon="Settings24" Tag="agentstrap" />
+                        <ui:NavigationItem Content="Agentstrap Profiles" PageType="{x:Type pages:ProfilesPage}" Icon="PersonBoard24" Tag="profiles" />
                         <ui:NavigationItem Content="Accounts" PageType="{x:Type pages:AccountsPage}" Icon="Person24" Tag="accounts" />
                         <ui:NavigationItem Content="{x:Static resources:Strings.Menu_About_Title}" Icon="QuestionCircle48" Margin="0,0,0,4" Command="{Binding OpenAboutCommand, Mode=OneTime}" />
                     </ui:NavigationFluent.Footer>
-                </ui:NavigationFluent>
+                    </ui:NavigationFluent>
+                </Grid>
             </Border>
 
             <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
@@ -88,7 +108,7 @@
             </Grid>
         </Grid>
 
-        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="16,10" BorderThickness="0,1,0,0">
+        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="18,10" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
             <StatusBar.Background>
                 <SolidColorBrush Color="{ui:ThemeResource ApplicationBackgroundColor}" Opacity="0" />
             </StatusBar.Background>
@@ -124,6 +144,12 @@
             </StatusBarItem>
             <StatusBarItem Grid.Column="5" Padding="6,0,0,0">
                 <ui:Button Appearance="Secondary" Content="{x:Static resources:Strings.Common_Close}" Height="36" MinWidth="90" Command="{Binding CloseWindowCommand, Mode=OneWay}" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2" HorizontalAlignment="Right" Padding="0,0,6,0">
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Appearance="Secondary" Content="AI" Height="36" MinWidth="60" Click="AILauncher_Click" Margin="0,0,6,0" />
+                    <ui:Button Appearance="Secondary" Content="Launch" Height="36" MinWidth="90" Command="{Binding LaunchRobloxCommand, Mode=OneWay}" />
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>

@@ -35,3 +35,13 @@ global using Agentstrap.Profiles;
 global using Agentstrap.Backups;
 global using Agentstrap.Diagnostics;
 global using Agentstrap.Accounts;
+global using Agentstrap.AI;
+
+global using NotificationStore = Agentstrap.Integrations.NotificationCenterService;
+global using NotificationService = Agentstrap.Integrations.NotificationCenterService;
+global using NotificationInboxService = Agentstrap.Integrations.NotificationCenterService;
+global using NotificationInbox = Agentstrap.Integrations.NotificationCenterService;
+
+global using RobloxAnalytics = Agentstrap.Integrations.RobloxAnalyticsService;
+global using RobloxAnalyticsServiceAlias = Agentstrap.Integrations.RobloxAnalyticsService;
+global using AnalyticsService = Agentstrap.Integrations.RobloxAnalyticsService;

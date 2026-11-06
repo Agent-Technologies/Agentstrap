@@ -75,7 +75,7 @@
 
         <controls:OptionControl Header="Frame rate cap"
                                 Description="Maximum frames per second. Use a very high value for uncapped.">
-            <TextBox Width="120" Padding="8,5" Text="{Binding FramerateCap, Mode=TwoWay}" />
+            <ui:TextBox Width="120" Padding="8,5" PlaceholderText="For example: 144" Text="{Binding FramerateCap, Mode=TwoWay}" />
         </controls:OptionControl>
 
         <!-- Audio. -->

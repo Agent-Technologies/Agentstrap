@@ -36,6 +36,8 @@ namespace Agentstrap.UI.ViewModels.Settings
 
         public EventHandler? RequestLaunchRobloxEvent;
 
+        public EventHandler? RequestApplyNavigationLayoutEvent;
+
         /// <summary>
         /// Shown in the status bar so the build you are actually running is always
         /// visible without opening About.
@@ -124,6 +126,8 @@ namespace Agentstrap.UI.ViewModels.Settings
             App.GlobalSettings.Save();
 
             App.PendingSettingTasks.Clear();
+
+            RequestApplyNavigationLayoutEvent?.Invoke(this, EventArgs.Empty);
 
             RequestSaveNoticeEvent?.Invoke(
                 this,

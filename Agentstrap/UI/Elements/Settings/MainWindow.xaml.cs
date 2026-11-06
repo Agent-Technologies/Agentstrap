@@ -1,10 +1,13 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
+using Agentstrap.UI.Elements.AI;
 using Agentstrap.UI.ViewModels.Settings;
 
 namespace Agentstrap.UI.Elements.Settings
@@ -16,6 +19,8 @@ namespace Agentstrap.UI.Elements.Settings
     {
         private Models.Persistable.WindowState _state => App.State.Prop.SettingsWindow;
 
+        private AIWindow? _aiWindow;
+
         public MainWindow(bool showAlreadyRunningWarning)
         {
             var viewModel = new MainWindowViewModel();
@@ -23,10 +28,15 @@ namespace Agentstrap.UI.Elements.Settings
             viewModel.RequestSaveNoticeEvent += (_, _) => SettingsSavedSnackbar.Show();
             viewModel.RequestCloseWindowEvent += (_, _) => Close();
             viewModel.RequestLaunchRobloxEvent += (_, _) => LaunchHandler.LaunchRoblox(LaunchMode.Player);
+            viewModel.RequestApplyNavigationLayoutEvent += (_, _) => ApplyNavigationLayout();
 
             DataContext = viewModel;
-            
+
             InitializeComponent();
+
+            Agentstrap.AI.AgentstrapActionRegistry.SettingsWindow = this;
+
+            ApplyNavigationLayout();
 
             App.Logger.WriteLine("MainWindow", "Initializing settings window");
 
@@ -74,11 +84,58 @@ namespace Agentstrap.UI.Elements.Settings
 
         public void SetPageService(IPageService pageService) => RootNavigation.PageService = pageService;
 
+        private void ApplyNavigationLayout()
+        {
+            var settings = App.Settings.Prop;
+            var items = RootNavigation.Items.OfType<Wpf.Ui.Controls.NavigationItem>().ToList();
+            var separators = RootNavigation.Items.OfType<Wpf.Ui.Controls.Navigation.NavigationSeparator>().ToList();
+            var order = settings.NavigationTabOrder ?? new List<string>();
+            var hidden = settings.HiddenNavigationTabs ?? new List<string>();
+            var ordered = items
+                .Where(item => item.Tag is string tag && !string.Equals(tag, "fastflageditor", StringComparison.OrdinalIgnoreCase) && !hidden.Contains(tag, StringComparer.OrdinalIgnoreCase))
+                .OrderBy(item => { var index = order.FindIndex(tag => string.Equals(tag, item.Tag?.ToString(), StringComparison.OrdinalIgnoreCase)); return index < 0 ? int.MaxValue : index; })
+                .ToList();
+
+            RootNavigation.Items.Clear();
+            string? previousGroup = null;
+            var separatorIndex = 0;
+            foreach (var item in ordered)
+            {
+                var tag = item.Tag?.ToString() ?? string.Empty;
+                var group = tag is "dashboard" ? "home" : tag is "roulette" or "experiences" or "sidequest" ? "discover" : "settings";
+                if (previousGroup is not null && previousGroup != group)
+                {
+                    RootNavigation.Items.Add(separatorIndex < separators.Count ? separators[separatorIndex++] : new Wpf.Ui.Controls.Navigation.NavigationSeparator());
+                }
+                RootNavigation.Items.Add(item);
+                previousGroup = group;
+            }
+            if (items.Any(item => string.Equals(item.Tag?.ToString(), "fastflageditor", StringComparison.OrdinalIgnoreCase)))
+            {
+                var editor = items.First(item => string.Equals(item.Tag?.ToString(), "fastflageditor", StringComparison.OrdinalIgnoreCase));
+                editor.Visibility = Visibility.Collapsed;
+                RootNavigation.Items.Add(editor);
+            }
+        }
+
         public void ShowWindow() => Show();
 
         public void CloseWindow() => Close();
 
         #endregion INavigationWindow methods
+
+        private void AILauncher_Click(object sender, RoutedEventArgs e)
+        {
+            if (_aiWindow is null || !_aiWindow.IsVisible)
+            {
+                _aiWindow = new AIWindow();
+                _aiWindow.Show();
+            }
+            else
+            {
+                _aiWindow.Activate();
+            }
+        }
 
         private void WpfUiWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -89,7 +146,7 @@ namespace Agentstrap.UI.Elements.Settings
                 if (result != MessageBoxResult.Yes)
                     e.Cancel = true;
             }
-            
+
             _state.Width = this.Width;
             _state.Height = this.Height;
 

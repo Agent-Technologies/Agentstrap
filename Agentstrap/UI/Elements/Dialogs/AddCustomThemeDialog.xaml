@@ -73,9 +73,10 @@
                                 MinWidth="100"
                                 VerticalAlignment="Center"
                                 Text="{x:Static resources:Strings.Common_Name}" />
-                            <TextBox
+                            <ui:TextBox
                                 Grid.Row="0"
                                 Grid.Column="1"
+                                PlaceholderText="Give your theme a name"
                                 Text="{Binding Path=Name, Mode=TwoWay}" />
 
                             <TextBlock

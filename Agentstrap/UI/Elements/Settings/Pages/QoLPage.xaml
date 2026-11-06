@@ -41,10 +41,10 @@
         <controls:OptionControl Header="Window size"
                                 Description="Width and height in pixels. Leave a box empty to keep Roblox's own value.">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBox Width="90" Padding="8,5" PreviewTextInput="ValidateUInt32"
+                <ui:TextBox Width="90" Padding="8,5" PlaceholderText="Width" PreviewTextInput="ValidateUInt32"
                          Text="{Binding WindowWidth}" />
                 <TextBlock Margin="8,0" VerticalAlignment="Center" Text="x" />
-                <TextBox Width="90" Padding="8,5" PreviewTextInput="ValidateUInt32"
+                <ui:TextBox Width="90" Padding="8,5" PlaceholderText="Height" PreviewTextInput="ValidateUInt32"
                          Text="{Binding WindowHeight}" />
             </StackPanel>
         </controls:OptionControl>
@@ -52,17 +52,17 @@
         <controls:OptionControl Header="Window position"
                                 Description="Top-left corner in screen pixels. Negative values are allowed for multi-monitor setups.">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBox Width="90" Padding="8,5" PreviewTextInput="ValidateInt32"
+                <ui:TextBox Width="90" Padding="8,5" PlaceholderText="X position" PreviewTextInput="ValidateInt32"
                          Text="{Binding WindowPositionX}" />
                 <TextBlock Margin="8,0" VerticalAlignment="Center" Text="x" />
-                <TextBox Width="90" Padding="8,5" PreviewTextInput="ValidateInt32"
+                <ui:TextBox Width="90" Padding="8,5" PlaceholderText="Y position" PreviewTextInput="ValidateInt32"
                          Text="{Binding WindowPositionY}" />
             </StackPanel>
         </controls:OptionControl>
 
         <controls:OptionControl Header="Window title"
                                 Description="Replaces the title shown on the game window. Leave empty to keep Roblox's title.">
-            <TextBox Width="240" Padding="8,5" Text="{Binding WindowTitle}" />
+            <ui:TextBox Width="240" Padding="8,5" PlaceholderText="Optional window title" Text="{Binding WindowTitle}" />
         </controls:OptionControl>
 
         <ui:Button Margin="0,12,0,0" Appearance="Secondary" Style="{StaticResource AgActionButton}"

@@ -4,7 +4,7 @@ namespace Agentstrap.Integrations
     public sealed class BarkClient
     {
         public const string DefaultEndpoint = "https://api.day.app/";
-        public const string DefaultIconUrl = "https://raw.githubusercontent.com/agentxco2-dev/Agentstrap/agentstrap-icon-host/Agentstrap/Agentstrap.png";
+        public const string DefaultIconUrl = "https://raw.githubusercontent.com/Agentstrap-Labs/Agentstrap/agentstrap-icon-host/Agentstrap/Agentstrap.png";
         public static readonly TimeSpan DefaultRequestTimeout = TimeSpan.FromSeconds(10);
         private const int MaxResponseBytes = 16 * 1024;
         private const int MaxMessageLength = 4096;

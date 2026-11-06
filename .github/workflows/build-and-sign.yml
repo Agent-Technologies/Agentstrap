@@ -1,0 +1,56 @@
+name: build-and-sign
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build_and_sign:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish
+        run: dotnet publish Agentstrap/Agentstrap.csproj -p:PublishProfile=Publish-x64 -c Release
+
+      - name: Stage executables
+        run: |
+          New-Item -ItemType Directory -Force -Path .\_BuildResult-unsigned | Out-Null
+          Copy-Item Agentstrap/bin/Release/net10.0-windows/win-x64/publish/Agentstrap.exe .\_BuildResult-unsigned\
+
+      - name: Upload unsigned artifact
+        id: upload-unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentstrap-unsigned
+          if-no-files-found: error
+          path: .\_BuildResult-unsigned\
+
+      - name: Submit signing request to SignPath
+        uses: signpath/github-action-submit-signing-request@v3
+        env:
+          SIGNPATH_SIGNING_POLICY_SLUG: test-signing
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'Agentstrap'
+          signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id: '${{ steps.upload-unsigned.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: 'agentstrap-signed'
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentstrap-signed
+          if-no-files-found: error
+          path: agentstrap-signed

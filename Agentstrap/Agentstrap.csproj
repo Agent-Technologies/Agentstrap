@@ -7,12 +7,16 @@
     <RootNamespace>Agentstrap</RootNamespace>
     <Title>Agentstrap</Title>
     <Product>Agentstrap</Product>
+    <Company>Agentstrap Labs</Company>
+    <Authors>Agentstrap Labs</Authors>
+    <Copyright>Copyright © Agentstrap Labs</Copyright>
+    <Description>Agentstrap is a Roblox bootstrapper that makes it easy to customize the Roblox experience and manage updates.</Description>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Agentstrap.ico</ApplicationIcon>
-    <Version>1.2.2</Version>
-    <FileVersion>1.2.2</FileVersion>
+    <Version>2.3.2</Version>
+    <FileVersion>2.3.2</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>

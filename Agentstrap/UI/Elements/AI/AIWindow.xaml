@@ -1,0 +1,11 @@
+<Window x:Class="Agentstrap.UI.Elements.AI.AIWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ai="clr-namespace:Agentstrap.UI.Elements.AI"
+        Title="Agentstrap AI" Width="420" Height="560"
+        MinWidth="360" MinHeight="420"
+        ResizeMode="CanResize"
+        WindowStartupLocation="Manual"
+        Background="{DynamicResource ApplicationBackgroundBrush}">
+    <ai:AIDashboard x:Name="Dashboard" />
+</Window>

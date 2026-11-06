@@ -43,10 +43,10 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" MinWidth="100" Text="{x:Static resources:Strings.Common_Name}" Margin="0,0,0,12" />
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="FlagNameTextBox" Margin="0,0,0,12" />
+                    <ui:TextBox Grid.Row="0" Grid.Column="1" Name="FlagNameTextBox" Margin="0,0,0,12" PlaceholderText="For example: FFlagDebugDisplayFPS" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" MinWidth="100" Text="{x:Static resources:Strings.Common_Value}" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="FlagValueTextBox" />
+                    <ui:TextBox Grid.Row="1" Grid.Column="1" Name="FlagValueTextBox" PlaceholderText="For example: True" />
                 </Grid>
             </TabItem>
             <TabItem Header="{x:Static resources:Strings.Common_ImportJson}">

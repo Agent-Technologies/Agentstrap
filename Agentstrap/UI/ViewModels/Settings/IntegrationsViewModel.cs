@@ -9,6 +9,118 @@ namespace Agentstrap.UI.ViewModels.Settings
 {
     public class IntegrationsViewModel : NotifyPropertyChangedViewModel
     {
+        private string _autoJoinPlaceId = App.Settings.Prop.AutoJoinExperiencePlaceId;
+        private string _autoJoinStatus = GetAutoJoinExperienceLabel();
+        private readonly AsyncRelayCommand _saveAutoJoinCommand;
+
+        public IntegrationsViewModel()
+        {
+            _saveAutoJoinCommand = new AsyncRelayCommand(SaveAutoJoinAsync);
+        }
+
+        public string AutoJoinPlaceId
+        {
+            get => _autoJoinPlaceId;
+            set
+            {
+                if (_autoJoinPlaceId == value)
+                    return;
+                _autoJoinPlaceId = value;
+                OnPropertyChanged(nameof(AutoJoinPlaceId));
+            }
+        }
+
+        public string AutoJoinStatus
+        {
+            get => _autoJoinStatus;
+            private set
+            {
+                if (_autoJoinStatus == value)
+                    return;
+                _autoJoinStatus = value;
+                OnPropertyChanged(nameof(AutoJoinStatus));
+            }
+        }
+
+        public ICommand SaveAutoJoinCommand => _saveAutoJoinCommand;
+        public ICommand DeleteAutoJoinCommand => new RelayCommand(DeleteAutoJoin);
+
+        private async Task SaveAutoJoinAsync()
+        {
+            if (!Integrations.ExperienceLibraryService.TryParsePlaceId(AutoJoinPlaceId, out string placeId))
+            {
+                AutoJoinStatus = "Enter a valid Roblox place ID or experience link.";
+                return;
+            }
+
+            AutoJoinPlaceId = placeId;
+            App.Settings.Prop.AutoJoinExperiencePlaceId = placeId;
+            App.Settings.Prop.AutoJoinExperienceEnabled = true;
+            AutoJoinStatus = "Saved. Looking up the experience name…";
+
+            try
+            {
+                string? experienceName = await GetExperienceNameAsync(placeId);
+                if (!String.IsNullOrWhiteSpace(experienceName))
+                    App.Settings.Prop.AutoJoinExperienceName = experienceName;
+
+                var record = Integrations.ExperienceLibraryService.AddOrUpdate(placeId, experienceName);
+                if (String.IsNullOrWhiteSpace(experienceName))
+                    experienceName = record.Name;
+
+                App.Settings.Prop.AutoJoinExperienceName = experienceName;
+                App.Settings.Save();
+                AutoJoinStatus = $"Will automatically join {experienceName} (Place ID {placeId}) when Roblox launches.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("IntegrationsViewModel::SaveAutoJoinAsync", ex);
+                string name = Integrations.ExperienceLibraryService.AddOrUpdate(placeId).Name;
+                App.Settings.Prop.AutoJoinExperienceName = name;
+                App.Settings.Save();
+                AutoJoinStatus = $"Will automatically join {name} (Place ID {placeId}) when Roblox launches.";
+            }
+        }
+
+        private static async Task<string?> GetExperienceNameAsync(string placeId)
+        {
+            using var universeResponse = await App.HttpClient.GetAsync($"https://apis.roblox.com/universes/v1/places/{placeId}/universe");
+            universeResponse.EnsureSuccessStatusCode();
+            using var universeJson = System.Text.Json.JsonDocument.Parse(await universeResponse.Content.ReadAsStringAsync());
+            if (!universeJson.RootElement.TryGetProperty("universeId", out var universeId))
+                return null;
+
+            using var gameResponse = await App.HttpClient.GetAsync($"https://games.roblox.com/v1/games?universeIds={universeId.GetInt64()}");
+            gameResponse.EnsureSuccessStatusCode();
+            using var gameJson = System.Text.Json.JsonDocument.Parse(await gameResponse.Content.ReadAsStringAsync());
+            if (!gameJson.RootElement.TryGetProperty("data", out var data) || data.GetArrayLength() == 0)
+                return null;
+
+            return data[0].TryGetProperty("name", out var name) ? name.GetString() : null;
+        }
+
+        private void DeleteAutoJoin()
+        {
+            App.Settings.Prop.AutoJoinExperienceEnabled = false;
+            App.Settings.Prop.AutoJoinExperiencePlaceId = String.Empty;
+            App.Settings.Prop.AutoJoinExperienceName = String.Empty;
+            App.Settings.Save();
+            AutoJoinPlaceId = String.Empty;
+            AutoJoinStatus = "Automatic experience joining is off.";
+        }
+
+        private static string GetAutoJoinExperienceLabel()
+        {
+            if (!App.Settings.Prop.AutoJoinExperienceEnabled
+                || !Integrations.ExperienceLibraryService.TryParsePlaceId(App.Settings.Prop.AutoJoinExperiencePlaceId, out string placeId))
+                return "Automatic experience joining is off.";
+
+            string name = App.Settings.Prop.AutoJoinExperienceName;
+            if (String.IsNullOrWhiteSpace(name))
+                name = $"Experience {placeId}";
+            return $"Will automatically join {name} (Place ID {placeId}) when Roblox launches.";
+        }
+
         public ICommand AddIntegrationCommand => new RelayCommand(AddIntegration);
 
         public ICommand DeleteIntegrationCommand => new RelayCommand(DeleteIntegration);

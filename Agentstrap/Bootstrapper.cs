@@ -1782,6 +1782,21 @@ namespace Agentstrap
                 );
             }
 
+            var incompatibleExtensionTargets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                string extensionRoot = Path.Combine(Paths.LocalAppData, App.ProjectName, "Extensions");
+                var extensionManager = new ExtensionManager(extensionRoot);
+                incompatibleExtensionTargets = extensionManager.GetIncompatibleOverlayTargets(_latestVersionDirectory).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                foreach (string incompatible in incompatibleExtensionTargets)
+                    App.Logger.WriteLine(LOG_IDENT, $"Skipping extension asset '{incompatible}' because this Roblox version does not contain that target path.");
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Could not validate enabled extension assets against the active client version.");
+                App.Logger.WriteException(LOG_IDENT, ex);
+            }
+
             foreach (
                 string file in Directory.GetFiles(
                     Paths.Modifications,
@@ -1796,6 +1811,9 @@ namespace Agentstrap
                     file.Substring(
                         Paths.Modifications.Length + 1
                     );
+
+                if (incompatibleExtensionTargets.Contains(relativeFile))
+                    continue;
 
                 if (relativeFile == "README.txt")
                 {

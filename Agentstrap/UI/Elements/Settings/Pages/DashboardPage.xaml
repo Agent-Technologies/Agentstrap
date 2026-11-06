@@ -12,7 +12,7 @@
 
     <StackPanel Margin="0,0,14,14">
 
-        <TextBlock Style="{StaticResource AgPageTitle}" Text="Command Center" />
+        <TextBlock Style="{StaticResource AgPageTitle}" Text="Welcome to Agentstrap" />
         <TextBlock Style="{StaticResource AgPageSubtitle}"
                    Text="Launch, update and repair Roblox without digging through settings." />
 
@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ui:Button Appearance="Secondary" Grid.Column="0" Style="{StaticResource AgActionButton}"
+            <ui:Button Appearance="Primary" Grid.Column="0" Style="{StaticResource AgActionButton}"
                        Icon="Play24" Content="Launch Roblox"
                        Command="{Binding LaunchRobloxCommand, Mode=OneTime}" />
 
@@ -101,6 +101,26 @@
 
         <!--  Tools.  Each of these jumps somewhere rather than repeating the work.  -->
         <TextBlock Style="{StaticResource AgSectionHeader}" Text="Tools" />
+
+        <Border Style="{StaticResource AgCard}" Margin="0,10,0,0">
+            <StackPanel>
+                <TextBlock Style="{StaticResource AgCardLabel}" Text="Recently launched" />
+                <TextBlock Style="{StaticResource AgCardValue}" Text="{Binding RecentExperienceSummary, Mode=OneWay}" />
+                <WrapPanel Margin="0,10,0,0">
+                    <ui:Button Content="Experience Records" Command="{Binding OpenExperiencesCommand, Mode=OneWay}" Margin="0,0,8,0" />
+                    <ui:Button Content="Profiles" Command="{Binding OpenProfilesCommand, Mode=OneWay}" Margin="0,0,8,0" />
+                    <ui:Button Content="Game Roulette" Command="{Binding OpenRouletteCommand, Mode=OneWay}" Margin="0,0,8,0" />
+                    <ui:Button Content="Sidequest Generator" Command="{Binding OpenSidequestCommand, Mode=OneWay}" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+
+        <UniformGrid Margin="0,8,0,0" Columns="2">
+            <ui:Button Appearance="Secondary" Style="{StaticResource AgActionButton}" Margin="0,0,4,0"
+                       Icon="WrenchScrewdriver20" Content="Mods" Command="{Binding OpenModsCommand, Mode=OneWay}" />
+            <ui:Button Appearance="Secondary" Style="{StaticResource AgActionButton}" Margin="4,0,0,0"
+                       Icon="Settings24" Content="Global Settings" Command="{Binding OpenGlobalSettingsCommand, Mode=OneWay}" />
+        </UniformGrid>
 
         <UniformGrid Margin="0,10,0,0" Columns="3">
             <ui:Button Appearance="Secondary" Style="{StaticResource AgActionButton}" Margin="0,0,4,0"

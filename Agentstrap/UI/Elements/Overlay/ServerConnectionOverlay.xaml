@@ -23,8 +23,8 @@
             Margin="12"
             Padding="14,10"
             VerticalAlignment="Center"
-            Background="#E61A1A1E"
-            BorderBrush="#2EFFFFFF"
+            Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}"
+            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="10">
         <Border.Effect>
@@ -45,7 +45,7 @@
                        VerticalAlignment="Center"
                        FontSize="14"
                        FontWeight="SemiBold"
-                       Foreground="#FFFFFFFF"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                        TextWrapping="Wrap"
                        Text="" />
         </StackPanel>

@@ -212,6 +212,25 @@ namespace Agentstrap
             if (launchMode == LaunchMode.None)
                 throw new InvalidOperationException("No Roblox launch mode set");
 
+            // Auto-join the configured experience for normal launches. Keep an explicit
+            // placeId from a Roblox game link intact so a user-launched link takes priority.
+            if (launchMode == LaunchMode.Player
+                && App.Settings.Prop.AutoJoinExperienceEnabled
+                && !TryGetExperiencePlaceId(App.LaunchSettings.RobloxLaunchArgs, out _)
+                && Integrations.ExperienceLibraryService.TryParsePlaceId(App.Settings.Prop.AutoJoinExperiencePlaceId, out var autoJoinPlaceId))
+            {
+                App.LaunchSettings.RobloxLaunchArgs = $"roblox://experiences/start?placeId={autoJoinPlaceId}";
+                App.Logger.WriteLine(LOG_IDENT, $"Auto-joining configured experience {autoJoinPlaceId}");
+            }
+
+            // Record only place IDs present in the actual Roblox launch URI. The
+            // library intentionally does not infer activity from Roblox processes.
+            if (launchMode == LaunchMode.Player && TryGetExperiencePlaceId(App.LaunchSettings.RobloxLaunchArgs, out var placeId))
+            {
+                try { Integrations.ExperienceLibraryService.AddOrUpdate(placeId, launch: true); }
+                catch (Exception ex) { App.Logger.WriteLine(LOG_IDENT, $"Could not record experience launch: {ex.Message}"); }
+            }
+
             if (!File.Exists(Path.Combine(Paths.System, "mfplat.dll")))
             {
                 UpdateLastRobloxLaunchStatus("Launch failed", "Windows Media Feature Pack (mfplat.dll) is missing.");
@@ -297,6 +316,14 @@ namespace Agentstrap
             dialog?.ShowBootstrapper();
 
             App.Logger.WriteLine(LOG_IDENT, "Exiting");
+        }
+
+        private static bool TryGetExperiencePlaceId(string? launchUri, out string placeId)
+        {
+            placeId = string.Empty;
+            if (string.IsNullOrWhiteSpace(launchUri)) return false;
+            var match = System.Text.RegularExpressions.Regex.Match(launchUri, @"(?:[?&]|^)placeId=(\d+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+            return match.Success && Integrations.ExperienceLibraryService.TryParsePlaceId(match.Groups[1].Value, out placeId);
         }
 
         public static void UpdateLastRobloxLaunchStatus(string status, string details)

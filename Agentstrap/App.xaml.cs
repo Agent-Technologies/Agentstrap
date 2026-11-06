@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Shell;
@@ -18,11 +18,11 @@ namespace Agentstrap
 #else
         public const string ProjectName = "Agentstrap";
 #endif
-        public const string ProjectOwner = "Agentstrap";
-        public const string ProjectRepository = "agentxco2-dev/Agentstrap";
-        public const string ProjectDownloadLink = "https://github.com/agentxco2-dev/Agentstrap/releases/latest";
+        public const string ProjectOwner = "Agentstrap Labs";
+        public const string ProjectRepository = "Agentstrap-Labs/Agentstrap";
+        public const string ProjectDownloadLink = "https://github.com/Agentstrap-Labs/Agentstrap/releases/latest";
         public const string ProjectHelpLink = "https://agentstrap-doc.pages.dev/help/";
-        public const string ProjectSupportLink = "https://github.com/agentxco2-dev/Agentstrap/issues/new";
+        public const string ProjectSupportLink = "https://github.com/Agentstrap-Labs/Agentstrap/issues/new";
 
         public static bool ProjectAutoUpdateEnabled => true;
 
@@ -58,6 +58,8 @@ namespace Agentstrap
         public static readonly JsonManager<Settings> Settings = new();
 
         public static readonly JsonManager<State> State = new();
+
+        public static readonly JsonManager<AISettingsData> AISettings = new("AISettings");
 
         public static readonly LazyJsonManager<DistributionState> PlayerState = new(nameof(PlayerState));
 
@@ -399,7 +401,9 @@ namespace Agentstrap
                 State.Load();
                 FastFlags.Load();
                 GlobalSettings.Load();
+                AISettings.Load();
                 Utility.RobloxBorderlessWindowService.Start();
+                Integrations.RobloxAnalyticsService.ReconcileUnfinishedSessions();
 
                 if (!Locale.SupportedLocales.ContainsKey(Settings.Prop.Locale))
                 {

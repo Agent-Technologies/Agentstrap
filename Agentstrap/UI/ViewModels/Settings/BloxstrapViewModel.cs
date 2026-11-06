@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
@@ -8,6 +9,49 @@ namespace Agentstrap.UI.ViewModels.Settings
 {
     public class BloxstrapViewModel : NotifyPropertyChangedViewModel
     {
+        public ObservableCollection<NavigationTabOption> NavigationTabs { get; } = new();
+
+        private static readonly (string Tag, string Label)[] NavigationTabDefinitions =
+        {
+            ("dashboard", "Home"), ("roulette", "Game Roulette"), ("experiences", "Experience Records"),
+            ("notifications", "Notification Center"), ("analytics", "Roblox Analytics"),
+            ("sidequest", "Sidequest Generator"), ("integrations", "Extensions"), ("bootstrapper", "Behaviour"),
+            ("mods", "Mods"), ("fastflags", "Fast Flags"), ("qol", "Quality of Life"),
+            ("globalsettings", "Global Settings"), ("appearance", "Appearance"), ("shortcuts", "Shortcuts"),
+            ("updates", "Updates"), ("diagnostics", "Diagnostics"), ("deployment", "Deployment"), ("advanced", "Advanced")
+        };
+
+        public BloxstrapViewModel()
+        {
+            var settings = App.Settings.Prop;
+            settings.NavigationTabOrder ??= new List<string>();
+            foreach (var definition in NavigationTabDefinitions)
+                if (!settings.NavigationTabOrder.Contains(definition.Tag, StringComparer.OrdinalIgnoreCase)) settings.NavigationTabOrder.Add(definition.Tag);
+            foreach (var tag in settings.NavigationTabOrder.ToList())
+            {
+                var definition = NavigationTabDefinitions.FirstOrDefault(x => x.Tag.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                if (definition.Tag is not null) NavigationTabs.Add(new NavigationTabOption(this, definition.Tag, definition.Label, !settings.HiddenNavigationTabs.Contains(definition.Tag, StringComparer.OrdinalIgnoreCase)));
+            }
+        }
+
+        public void SetTabVisibility(string tag, bool isVisible)
+        {
+            if (isVisible) App.Settings.Prop.HiddenNavigationTabs.RemoveAll(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            else if (!App.Settings.Prop.HiddenNavigationTabs.Contains(tag, StringComparer.OrdinalIgnoreCase)) App.Settings.Prop.HiddenNavigationTabs.Add(tag);
+        }
+
+        public void MoveTab(NavigationTabOption option, int offset)
+        {
+            var index = NavigationTabs.IndexOf(option);
+            var target = index + offset;
+            if (target < 0 || target >= NavigationTabs.Count) return;
+            NavigationTabs.Move(index, target);
+            App.Settings.Prop.NavigationTabOrder = NavigationTabs.Select(x => x.Tag).ToList();
+        }
+
+        public void MoveTabUp(NavigationTabOption option) => MoveTab(option, -1);
+        public void MoveTabDown(NavigationTabOption option) => MoveTab(option, 1);
+
         public WebEnvironment[] WebEnvironments => Enum.GetValues<WebEnvironment>();
 
         public bool UpdateCheckingEnabled
@@ -109,6 +153,18 @@ namespace Agentstrap.UI.ViewModels.Settings
                 }
             }
         }
+    }
+
+    public sealed class NavigationTabOption : NotifyPropertyChangedViewModel
+    {
+        private readonly BloxstrapViewModel _owner;
+        private bool _isVisible;
+        public NavigationTabOption(BloxstrapViewModel owner, string tag, string label, bool isVisible) { _owner = owner; Tag = tag; Label = label; _isVisible = isVisible; }
+        public string Tag { get; }
+        public string Label { get; }
+        public bool IsVisible { get => _isVisible; set { if (_isVisible == value) return; _isVisible = value; _owner.SetTabVisibility(Tag, value); OnPropertyChanged(nameof(IsVisible)); } }
+        public ICommand MoveUpCommand => new RelayCommand(() => _owner.MoveTabUp(this));
+        public ICommand MoveDownCommand => new RelayCommand(() => _owner.MoveTabDown(this));
     }
 }
 
