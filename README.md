@@ -32,21 +32,21 @@ Agentstrap is only supported on PCs running Windows.
 
 Features
 New in Agentstrap
-Matchmaker — Automatically join a place on launch, optionally preferring servers that aren't already full.
-Command Center — Launch, update, and repair Roblox from a single screen, with live status for every part of the installation.
-Server Connection Overlay — A toast notification on the game window telling you which server you connected to and where its data center is located.
-Diagnostics — Eight health checks that identify broken installations, bad permissions, conflicting mods, and pending configuration migrations.
-Deployment Channels — Pin Agentstrap to a specific Roblox release channel instead of following production.
-Custom Window Attributes — Force a fixed size, position, and title on the Roblox window every time.
-Updates Page — Independently check for updates to Agentstrap, your installed mods, and your configuration.
-NEXUS Mode — An opt-in experimental feature channel.
-Global Settings — Save Roblox settings in Agentstrap and have them applied to Roblox. :)
+Matchmaker - Automatically join a place on launch, optionally preferring servers that aren't already full.
+Command Center - Launch, update, and repair Roblox from a single screen, with live status for every part of the installation.
+Server Connection Overlay - A toast notification on the game window telling you which server you connected to and where its data center is located.
+Diagnostics - Eight health checks that identify broken installations, bad permissions, conflicting mods, and pending configuration migrations.
+Deployment Channels - Pin Agentstrap to a specific Roblox release channel instead of following production.
+Custom Window Attributes - Force a fixed size, position, and title on the Roblox window every time.
+Updates Page - Independently check for updates to Agentstrap, your installed mods, and your configuration.
+NEXUS Mode - An opt-in experimental feature channel.
+Global Settings - Save Roblox settings in Agentstrap and have them applied to Roblox. :)
 From Bloxstrap
-Discord Rich Presence — Hassle-free Discord Rich Presence, so your friends know what you're playing at a glance.
-Content Modding — Modify content files such as cursors, sounds, emoji fonts, custom fonts, and skyboxes. Your modifications survive Roblox updates.
-Server Location Hints — See server location information, courtesy of ipinfo.io.
-Fast Flag Management — Manage Fast Flags with rendering presets, preset bundles, and a built-in flag validator.
-Customization — Custom themes, custom shortcuts, and a configurable bootstrapper.
+Discord Rich Presence - Hassle-free Discord Rich Presence, so your friends know what you're playing at a glance.
+Content Modding - Modify content files such as cursors, sounds, emoji fonts, custom fonts, and skyboxes. Your modifications survive Roblox updates.
+Server Location Hints - See server location information, courtesy of ipinfo.io.
+Fast Flag Management - Manage Fast Flags with rendering presets, preset bundles, and a built-in flag validator.
+Customization - Custom themes, custom shortcuts, and a configurable bootstrapper.
 
 Full documentation for all these features is available in docs/.
 
