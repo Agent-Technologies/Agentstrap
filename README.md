@@ -1,3 +1,7 @@
+ [Agent Technologies Developer Application](https://forms.gle/8VxwBFtKLncau4h59)
+
+ Please record your email.
+
 > [!CAUTION]
 > The only official place to download Agentstrap is this GitHub repository and the
 > [Agentstrap documentation site](https://agentstrap-doc.pages.dev). Any other website offering downloads or
