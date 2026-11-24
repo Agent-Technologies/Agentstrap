@@ -121,6 +121,6 @@ Agentstrap is a fork of Bloxstrap by pizzaboxer, and it would not exist without 
 
 Anyway, Roblox and Roblox Studio are trademarks of Roblox Corporation.
 
-### Contributors
+## Contributors
 
 AgentXCO4, ByeBendy
